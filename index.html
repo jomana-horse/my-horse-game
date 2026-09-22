@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>لعبة سباق الخيل</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: sans-serif; }
+        body { background-color: #1a252f; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 10px; }
+        .game-container { width: 100%; max-width: 500px; background: #2c3e50; border-radius: 12px; padding: 15px; text-align: center; }
+        h1 { color: #f1c40f; font-size: 20px; margin-bottom: 10px; }
+        .track-container { background: #27ae60; border: 3px solid #1e8449; border-radius: 8px; padding: 10px 5px; margin: 15px 0; position: relative; }
+        .lane { height: 45px; border-bottom: 2px dashed rgba(255, 255, 255, 0.4); position: relative; display: flex; align-items: center; }
+        .lane:last-child { border-bottom: none; }
+        .horse { position: absolute; left: 5px; font-size: 28px; transition: left 0.1s linear; }
+        button { background: #e67e22; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; }
+        .result-modal { margin-top: 10px; font-size: 16px; font-weight: bold; color: #f39c12; min-height: 30px; }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <h1>🏇 سباق الخيول 🏇</h1>
+    <div class="track-container">
+        <div class="lane"><div class="horse" id="horse1" style="left: 0px;">🐎</div></div>
+        <div class="lane"><div class="horse" id="horse2" style="left: 0px;">🏇</div></div>
+        <div class="lane"><div class="horse" id="horse3" style="left: 0px;">🐴</div></div>
+    </div>
+    <button id="tap-btn" onclick="tapHorse()">اضغط بسرعة للركض! ⚡</button>
+    <div class="result-modal" id="result-text">اضغط للبدء!</div>
+</div>
+<script>
+    let h1Pos = 0, h2Pos = 0, h3Pos = 0, gameActive = false, raceInterval = null;
+    function startRace() {
+        h1Pos = 0; h2Pos = 0; h3Pos = 0; updatePositions();
+        gameActive = true;
+        document.getElementById('result-text').innerText = 'السباق شغال! اضغط بسرعة! 🏁';
+        if (raceInterval) clearInterval(raceInterval);
+        raceInterval = setInterval(() => {
+            if (!gameActive) return;
+            h2Pos += Math.random() * 3 + 0.5;
+            h3Pos += Math.random() * 3.2 + 0.5;
+            updatePositions();
+            checkWinner();
+        }, 100);
+    }
+    function tapHorse() {
+        if (!gameActive) { startRace(); return; }
+        h1Pos += 4; updatePositions(); checkWinner();
+    }
+    function updatePositions() {
+        let max = document.querySelector('.track-container').clientWidth - 50;
+        document.getElementById('horse1').style.left = Math.min(h1Pos, max) + 'px';
+        document.getElementById('horse2').style.left = Math.min(h2Pos, max) + 'px';
+        document.getElementById('horse3').style.left = Math.min(h3Pos, max) + 'px';
+    }
+    function checkWinner() {
+        let max = document.querySelector('.track-container').clientWidth - 50;
+        if (h1Pos >= max || h2Pos >= max || h3Pos >= max) {
+            gameActive = false; clearInterval(raceInterval);
+            if (h1Pos >= max) document.getElementById('result-text').innerText = '🎉 مبروك! حصانك فاز!';
+            else document.getElementById('result-text').innerText = '❌ الخصم فاز بالسباق!';
+        }
+    }
+</script>
+</body>
+</html>
