@@ -23,7 +23,11 @@ def index():
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "مرحباً بك في لعبة سباق الخيول! اضغط أدناه للاستمتاع باللعبة.")
+        markup = telebot.types.InlineKeyboardMarkup()
+    btn = telebot.types.InlineKeyboardButton("ابدأ السباق 🐎", url="https://jomana-horse.github.io/my-horse-game/")
+    markup.add(btn)
+    bot.send_message(message.chat.id, "مرحباً بك في لعبة سباق الخيول! اضغط على الزر أدناه لبدء السباق:", reply_markup=markup)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
