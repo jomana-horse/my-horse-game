@@ -1,9 +1,8 @@
-
 import os
 from flask import Flask, request
 import telebot
 
-TOKEN = "8916405958:AAFizipiIHZQAPRQfMBL94GgyoMEQM-3zCU"
+TOKEN = "8916405958:AAFizipihZtQAPQH9BL94GgysMEQN-3zCU"
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
 
@@ -23,11 +22,12 @@ def index():
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-        markup = telebot.types.InlineKeyboardMarkup()
+    markup = telebot.types.InlineKeyboardMarkup()
     btn = telebot.types.InlineKeyboardButton("ابدأ السباق 🐎", url="https://jomana-horse.github.io/my-horse-game/")
     markup.add(btn)
     bot.send_message(message.chat.id, "مرحباً بك في لعبة سباق الخيول! اضغط على الزر أدناه لبدء السباق:", reply_markup=markup)
-
+            
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
